@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.2
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root       # Set the root password
+      MYSQL_DATABASE: shop                   # Initial database to create
+      MYSQL_USER: admin                           # Optional user
+      MYSQL_PASSWORD: admin              # Password for the optional user
+    ports:
+      - "3306:3306"                                   # Map port 3306 on host to container
+    command: --default-authentication-plugin=mysql_native_password  # Use legacy authentication
+    volumes:
+      - db_data:/var/lib/mysql      
+      - ./dump.sql:/docker-entrypoint-initdb.d/database_dump.sql                    # Persistent data storage
+
+volumes:
+  db_data:
+    driver: local                                     # Use local driver for volume management
